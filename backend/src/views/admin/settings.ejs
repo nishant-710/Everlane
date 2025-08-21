@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings</title>
+</head>
+
+<body style="margin: 0; font-family: Arial, sans-serif; background-color: #f4f6f8">
+  <%- include('partials/sidebar') %>
+
+    <div style="margin-left: 220px">
+      <%- include('partials/header') %>
+        <div style="
+          max-width: 600px;
+          margin: 50px auto;
+          background: white;
+          padding: 30px;
+          border-radius: 10px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          text-align: center;
+        ">
+          <h1 style="color: #333; margin-bottom: 10px">Settings</h1>
+          <h4 style="color: #666; margin: 5px 0">
+            <%= user?.name %>
+          </h4>
+          <h4 style="color: #666; margin-bottom: 30px">
+            <%= user?.email %>
+          </h4>
+
+          <div style="
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+          ">
+            <!-- Edit Form -->
+            <form id="editDash" method="POST" action="/admin/editProfile" style="
+              flex: 1;
+              min-width: 250px;
+              background-color: #f9f9f9;
+              padding: 20px;
+              border-radius: 8px;
+              box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            ">
+              <h3 style="margin-bottom: 15px; color: #007bff">Edit Profile</h3>
+              <label for="name" style="display: block; margin-bottom: 5px">New Name:</label>
+              <input type="text" name="name" id="name" value="<%= user?.name %>" style="
+                width: 100%;
+                padding: 8px;
+                margin-bottom: 15px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+              " />
+
+              <button type="submit" style="
+                width: 100%;
+                padding: 10px;
+                background-color: #28a745;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+              ">
+                Submit Now
+              </button>
+            </form>
+
+            <!-- Delete Form -->
+            <form id="delete" method="POST" action="/admin/deleteAccount" style="
+              flex: 1;
+              min-width: 250px;
+              background-color: #fff4f4;
+              padding: 20px;
+              border-radius: 8px;
+              box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            ">
+              <button type="submit" style="
+                background-color: #dc3545;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+              " onclick="return confirm('Are You Sure??')" ;>
+                Delete Account
+              </button>
+            </form>
+          </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#editDash").on("submit", function (e) {
+          e.preventDefault();
+
+          const formData = {
+            name: $("#name").val().trim(),
+          };
+
+          $.ajax({
+            url: `/admin/editProfile`,
+            method: "POST",
+            data: JSON.stringify(formData),
+            contentType: "application/json",
+            success: function (response) {
+              Swal.fire({
+                icon: "success",
+                text: response.message,
+                title: "Success!",
+              });
+              setTimeout(() => {
+                window.location.href = response.redirect;
+              }, 1100);
+            },
+            error: function (xhr) {
+              const err = JSON.parse(xhr.responseText);
+              alert(err.message);
+            },
+          });
+        });
+      });
+
+      $(document).ready(function () {
+        $("#delete").on("submit", function (e) {
+          e.preventDefault();
+
+          $.ajax({
+            url: `/admin/deleteAccount`,
+            method: "POST",
+            contentType: "application/json",
+            success: function (response) {
+              Swal.fire({
+                icon: "success",
+                text: response.message,
+                title: "Success!",
+              });
+              setTimeout(() => {
+                window.location.href = response.redirect;
+              }, 1100);
+            },
+            error: function (xhr) {
+              const err = JSON.parse(xhr.responseText);
+              alert(err.message);
+            },
+          });
+        });
+      });
+    </script>
+</body>
+
+</html>

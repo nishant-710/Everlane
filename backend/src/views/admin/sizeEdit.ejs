@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Size</title>
+</head>
+
+<body style="margin: 0; font-family: Arial, sans-serif; background-color: #f4f6f8">
+    <%- include('partials/sidebar') %>
+
+        <div style="margin-left: 220px">
+            <%- include('partials/header') %>
+
+                <div
+                    style="max-width: 600px; margin: 40px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);">
+                    <h2 style="text-align: center; color: #333; margin-bottom: 30px">Edit Size</h2>
+
+                    <form action="/admin/size/<%= size._id %>/edit" method="POST">
+                        <div style="margin-bottom: 20px">
+                            <label for="name" style="display: block; margin-bottom: 8px; color: #555">Size Name</label>
+                            <input type="text" id="name" name="name" value="<%= size.name %>"
+                                style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;" />
+                        </div>
+
+                        <div style="margin-bottom: 20px">
+                            <label for="name" style="display: block; margin-bottom: 8px; color: #555">Size
+                                Symbol</label>
+                            <input type="text" id="symbol" name="symbol" placeholder="Enter size symbol (e.g. S, M, L)"
+                                value="<%= size.symbol %>"
+                                style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;" />
+                        </div>
+
+                        <div style="text-align: center">
+                            <button type="submit"
+                                style="background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Update
+                                Size</button>
+                        </div>
+                    </form>
+                </div>
+        </div>
+</body>
+
+</html>

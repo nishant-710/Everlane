@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Product</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body style="margin: 0; font-family: Arial, sans-serif; background-color: #f4f6f8">
+    <!-- Sidebar -->
+    <%- include('partials/sidebar') %>
+
+        <!-- Main content -->
+        <div style="margin-left: 220px">
+            <%- include('partials/header') %>
+
+                <div style="
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+      ">
+                    <h2 style="text-align: center; color: #2c3e50; margin-bottom: 30px">
+                        Edit Product
+                    </h2>
+
+                    <form method="POST" action="/admin/product/<%= product._id %>/edit" enctype="multipart/form-data">
+                        <!-- Name -->
+                        <label for="name" style="display: block; margin-bottom: 6px; font-weight: bold">Product
+                            Name:</label>
+                        <input type="text" name="name" id="name" value="<%= product.name %>" placeholder="Enter Name"
+                            style="
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+          " required />
+
+                        <!-- Price -->
+                        <label for="price" style="display: block; margin-bottom: 6px; font-weight: bold">Price:</label>
+                        <input type="number" name="price" id="price" value="<%= product.price %>"
+                            placeholder="Enter Price" style="
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+          " required />
+
+                        <!-- Description -->
+                        <label for="description" style="font-weight: bold">Description:</label>
+                        <input type="text" name="description" required placeholder="Enter Product Description"
+                            id="description" value="<%= product.description %>"
+                            style="width: 100%; padding: 10px; margin-bottom: 20px" required />
+
+                        <!-- Brand -->
+                        <label for="brand" style="font-weight: bold">Product Brand:</label>
+                        <input type="text" name="brand" required placeholder="Enter Product Brand" id="brand"
+                            value="<%= product.brand %>" style="width: 100%; padding: 10px; margin-bottom: 20px"
+                            required />
+
+                        <!--Main Category Dropdown -->
+                        <label for="category" style="font-weight: bold">Main Category:</label>
+                        <select name="mainId" required style="width: 100%; padding: 10px; margin-bottom: 20px">
+                            <option value="">-- Select Category --</option>
+                            <% if (category.length> 0) { category.forEach(cat=>{ %>
+                                <option value="<%=cat._id%>" <%=String(product.mainId)===String(cat._id) ? 'selected'
+                                    : '' %>>
+                                    <%=cat.name%>
+                                </option>
+                                <%})}%>
+                        </select>
+
+                        <!-- Sub Category Dropdown -->
+                        <div id="subCategoryContainer" style="margin-bottom: 20px;">
+                            <label for="categoryId" style="font-weight: bold">Sub Category:</label>
+                            <select name="categoryId" id="categoryId" style="width: 100%; padding: 10px;">
+                                <option value="">-- Select Sub Category --</option>
+                                <% if (subCat.length> 0) { subCat.forEach(cat=>{ %>
+                                    <option value="<%=cat._id%>" <%=String(product.categoryId)===String(cat._id)
+                                        ? 'selected' : '' %>>
+                                        <%=cat.name%>
+                                    </option>
+                                    <%})}%>
+                            </select>
+                        </div>
+
+                        <!-- Filters (Checkboxes) -->
+                        <label style="font-weight: bold">Filters:</label>
+                        <div style="margin-bottom: 20px;">
+                            <% if (filters && filters.length> 0) { %>
+                                <% filters.forEach(filt=> {
+                                    const isChecked = product.filters.some(f => f.toString() === filt._id.toString());
+                                    %>
+                                    <label>
+                                        <input type="checkbox" name="filterId" value="<%= filt._id %>" <%=isChecked
+                                            ? 'checked' : '' %> />
+                                        <%= filt.name %>
+                                    </label><br>
+                                    <% }) %>
+                                        <% } %>
+                        </div>
+
+
+                        <!-- Offer Section -->
+                        <label for="offerType" style="font-weight: bold">Offer Type:</label>
+                        <select name="offerType" style="width: 100%; padding: 10px; margin-bottom: 20px">
+                            <option value="">-- No Offer --</option>
+                            <option value="flat" <%=product.offer?.type==="flat" ? "selected" : "" %>>Flat ₹</option>
+                            <option value="percent" <%=product.offer?.type==="percent" ? "selected" : "" %>>Percent %
+                            </option>
+                        </select>
+                        <div id="offerBox">
+                            <label for="offerValue" style="font-weight: bold">Offer Value:</label>
+                            <input type="number" name="offerValue" placeholder="Enter Offer Value"
+                                style="width: 100%; padding: 10px; margin-bottom: 20px"
+                                value="<%= product.offer?.value || '' %>" />
+
+                            <label for="offerExpiresAt" style="font-weight: bold">Offer Expiry:</label>
+                            <input type="date" name="offerExpiresAt"
+                                style="width: 100%; padding: 10px; margin-bottom: 20px"
+                                value="<%= product.offer?.expiresAt ? product.offer.expiresAt.toISOString().slice(0,10) : '' %>" />
+                        </div>
+
+
+                        <!-- Image Upload -->
+                        <label for="image" style="display: block; margin-bottom: 6px; font-weight: bold">Product
+                            Image:</label>
+                        <input type="file" name="image" accept="image/*" style="
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+          " multiple />
+
+                        <!-- Submit Button -->
+                        <button type="submit" style="
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+          ">
+                            Update Product
+                        </button>
+                    </form>
+                </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $('select[name="mainId"]').on('change', function () {
+                    const mainId = $(this).val();
+
+                    if (!mainId) {
+                        $('#subCategoryContainer').hide();
+                        $('#categoryId').html('<option value="">-- Select Sub Category --</option>');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: `/admin/getSub/${mainId}`,
+                        type: 'GET',
+                        success: function (data) {
+                            let options = '<option value="">-- Select Sub Category --</option>';
+                            if (data.length > 0) {
+                                data.forEach(sub => {
+                                    options += `<option value="${sub._id}">${sub.name}</option>`;
+                                });
+                                $('#categoryId').html(options);
+                                $('#subCategoryContainer').show();
+                            } else {
+                                $('#categoryId').html(options);
+                                $('#subCategoryContainer').hide();
+                            }
+                        },
+                        error: function () {
+                            Swal.fire('Error', 'Failed to load sub-categories', 'error');
+                        }
+                    });
+                });
+                // 🟢 Offer Box Toggle Logic
+                function toggleOfferBox() {
+                    const offerType = $('select[name="offerType"]').val();
+                    if (offerType === "") {
+                        $('#offerBox').hide();
+                        $('#offerBox').find('input, select').prop('disabled', true); // disable fields
+                    } else {
+                        $('#offerBox').show();
+                        $('#offerBox').find('input, select').prop('disabled', false); // enable fields
+                    }
+                }
+
+                // Trigger on change
+                $('select[name="offerType"]').on('change', toggleOfferBox);
+
+                // Trigger on page load
+                toggleOfferBox()
+            });
+        </script>
+</body>
+
+</html>

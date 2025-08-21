@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Store</title>
+</head>
+
+<body style="margin: 0; font-family: Arial, sans-serif; background-color: #f4f6f8">
+    <%- include('partials/sidebar') %>
+
+        <div style="margin-left: 220px">
+            <%- include('partials/header') %>
+
+                <div style="padding: 30px">
+                    <h2 style="color: #2c3e50; text-align: center; margin-bottom: 30px">
+                        Add Store
+                    </h2>
+
+                    <div style="
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+          ">
+                        <form action="/admin/storesAdd" method="POST" enctype="multipart/form-data">
+                            <div style="margin-bottom: 20px">
+                                <label style="display: block; font-weight: bold; margin-bottom: 8px">Store Name</label>
+                                <input type="text" name="name" required
+                                    style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px" />
+                            </div>
+
+                            <div style="margin-bottom: 20px">
+                                <label style="display: block; font-weight: bold; margin-bottom: 8px">Location</label>
+                                <input type="text" name="location" required placeholder="Enter store location manually"
+                                    style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px" />
+                            </div>
+
+                            <div style="margin-bottom: 20px">
+                                <label style="display: block; font-weight: bold; margin-bottom: 8px">Store Image</label>
+                                <input type="file" name="image" accept="image/*" />
+                            </div>
+
+                            <button type="submit"
+                                style="padding: 10px 20px; background-color: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer">
+                                Submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+        </div>
+</body>
+
+</html>

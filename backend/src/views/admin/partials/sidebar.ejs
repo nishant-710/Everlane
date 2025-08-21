@@ -1,0 +1,133 @@
+<body>
+  <div style="
+      width: 220px;
+      height: 100vh;
+      background-color: #2c3e50;
+      position: fixed;
+      top: 0;
+      left: 0;
+      color: white;
+      padding-top: 30px;
+    ">
+    <h2 style="text-align: center; margin-bottom: 40px">Admin Panel</h2>
+    <a href="/admin/users" style="
+        display: block;
+        padding: 15px 20px;
+        text-decoration: none;
+        color: white;
+        transition: background 0.3s;
+      ">Users</a>
+    <a href="/admin/category" style="
+        display: block;
+        padding: 15px 20px;
+        text-decoration: none;
+        color: white;
+        transition: background 0.3s;
+      ">Categories</a>
+    <a href="/admin/product" style="
+        display: block;
+        padding: 15px 20px;
+        text-decoration: none;
+        color: white;
+        transition: background 0.3s;
+      ">Products</a>
+    <a href="/admin/slider" style="
+        display: block;
+        padding: 15px 20px;
+        text-decoration: none;
+        color: white;
+        transition: background 0.3s;
+      ">Sliders</a>
+    <a href="/admin/filters" style="
+        display: block;
+        padding: 15px 20px;
+        text-decoration: none;
+        color: white;
+        transition: background 0.3s;
+      ">Filters</a>
+    <a href="/admin/size" style="
+        display: none;
+        padding: 15px 20px;
+        text-decoration: none;
+        color: white;
+        transition: background 0.3s;
+      ">Sizes</a>
+    <a href="/admin/color" style="
+        display: none;
+        padding: 15px 20px;
+        text-decoration: none;
+        color: white;
+        transition: background 0.3s;
+      ">Colors</a>
+    <a href="/admin/stores" style="
+        display: block;
+        padding: 15px 20px;
+        text-decoration: none;
+        color: white;
+        transition: background 0.3s;
+      ">Stores</a>
+    <a href="/admin/orders" style="
+        display: block;
+        padding: 15px 20px;
+        text-decoration: none;
+        color: white;
+        transition: background 0.3s;
+      ">Orders</a>
+    <a href="/admin/settings" style="
+        display: block;
+        padding: 15px 20px;
+        text-decoration: none;
+        color: white;
+        transition: background 0.3s;
+      ">Settings</a>
+    <form action="/admin/logout" method="POST" style="margin: 0" id="logout">
+      <button type="submit" style="
+          display: block;
+          width: 100%;
+          padding: 15px 20px;
+          text-decoration: none;
+          background: none;
+          border: none;
+          color: white;
+          text-align: left;
+          transition: background 0.3s;
+          cursor: pointer;
+        ">
+        Logout
+      </button>
+    </form>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $("#logout").on("submit", function (e) {
+        e.preventDefault();
+
+        $.ajax({
+          url: `/admin/logout`,
+          method: "POST",
+          contentType: "application/json",
+          success: function (response) {
+            Swal.fire({
+              icon: "success",
+              title: response.message,
+              toast: true,
+              position: "top",
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+            });
+            setTimeout(() => {
+              window.location.href = response.redirect;
+            }, 1100);
+          },
+          error: function (xhr) {
+            const err = JSON.parse(xhr.responseText);
+            alert(err.message);
+          },
+        });
+      });
+    });
+  </script>
+</body>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Store</title>
+  </head>
+  <body style="margin: 0; font-family: Arial, sans-serif; background-color: #f4f6f8">
+    <%- include('partials/sidebar') %>
+
+    <div style="margin-left: 220px">
+      <%- include('partials/header') %>
+
+      <div style="padding: 30px">
+        <h2 style="color: #2c3e50; text-align: center; margin-bottom: 30px">
+          Edit Store
+        </h2>
+
+        <div style="
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+          ">
+          <form action="/admin/storesEdit/<%= id %>" method="POST" enctype="multipart/form-data">
+            <div style="margin-bottom: 20px">
+              <label style="display: block; font-weight: bold; margin-bottom: 8px">Store Name</label>
+              <input type="text" name="name" required value="<%= store.name %>"
+                style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px" />
+            </div>
+
+            <div style="margin-bottom: 20px">
+              <label style="display: block; font-weight: bold; margin-bottom: 8px">Location</label>
+              <input type="text" name="location" required value="<%= store.location %>"
+                style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px" />
+            </div>
+
+            <div style="margin-bottom: 20px">
+              <label style="display: block; font-weight: bold; margin-bottom: 8px">Current Image</label><br />
+              <% if (store.image) { %>
+                <img src="/uploads/<%= store.image %>" style="width: 100px; height: auto; border-radius: 6px;" />
+              <% } else { %>
+                <p style="color: #7f8c8d">No image uploaded.</p>
+              <% } %>
+            </div>
+
+            <div style="margin-bottom: 20px">
+              <label style="display: block; font-weight: bold; margin-bottom: 8px">Change Image</label>
+              <input type="file" name="image" accept="image/*" />
+            </div>
+
+            <button type="submit"
+              style="padding: 10px 20px; background-color: #2980b9; color: white; border: none; border-radius: 4px; cursor: pointer">
+              Update
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

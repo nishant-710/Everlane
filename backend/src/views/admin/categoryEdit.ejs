@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body style="margin: 0; font-family: Arial, sans-serif; background-color: #f4f6f8">
+  <!-- Sidebar -->
+  <%- include('partials/sidebar') %>
+
+    <!-- Main content -->
+    <div style="margin-left: 220px">
+      <%- include('partials/header') %>
+
+        <div style="
+          max-width: 600px;
+          margin: 50px auto;
+          background-color: #fff;
+          padding: 30px;
+          border-radius: 10px;
+          box-shadow: 0 0 12px rgba(115, 105, 105, 0.1);
+        ">
+          <h2 style="text-align: center; color: #2c3e50; margin-bottom: 30px">
+            Edit Category
+          </h2>
+
+          <form method="POST" action="/admin/category/<%=id%>/edit" enctype="multipart/form-data">
+            <% if (category.parentId) { %>
+            <label for="parentId" style="font-weight: bold">Main Category:</label>
+            <select name="parentId" style="width: 100%; padding: 10px; margin-bottom: 20px">
+              <option value="">--Select Main Category--</option>
+              <% if (categories.length> 0) { categories.forEach(cat=> { %>
+                <option value="<%=cat._id%>" <%=String(category.parentId)===String(cat._id) ? "selected" : "" %>>
+                  <%=cat.name%>
+                </option>
+                <% })}} %>
+            </select>
+
+            <!-- Name -->
+            <label for="name" style="display: block; margin-bottom: 6px; font-weight: bold">Name:</label>
+            <input type="text" name="name" id="name" value="<%=category.name%>" placeholder="Enter Name" style="
+              width: 100%;
+              padding: 10px;
+              margin-bottom: 20px;
+              border: 1px solid #ccc;
+              border-radius: 5px;
+            " required />
+
+            <!-- Image Upload -->
+            <label for="image" style="font-weight: bold">Category Image:</label>
+            <input type="file" name="image" accept="image/*" style="width: 100%; padding: 10px; margin-bottom: 20px"
+              multiple />
+
+            <!-- Submit Button -->
+            <button type="submit" style="
+              width: 100%;
+              padding: 12px;
+              background-color: #007bff;
+              color: white;
+              border: none;
+              border-radius: 5px;
+              font-size: 16px;
+              cursor: pointer;
+            ">
+              Edit
+            </button>
+          </form>
+        </div>
+    </div>
+</body>
+
+</html>

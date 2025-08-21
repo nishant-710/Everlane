@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Slider</title>
+</head>
+
+<body style="margin: 0; font-family: Arial, sans-serif; background-color: #f4f6f8">
+  <%- include('partials/sidebar') %>
+
+    <div style="margin-left: 220px">
+      <%- include('partials/header') %>
+
+        <div style="padding: 30px">
+          <h2 style="color: #2c3e50; text-align: center; margin-bottom: 30px">
+            Edit Slider
+          </h2>
+
+          <div style="
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+          ">
+            <form action="/admin/slider/<%= id %>/edit" method="POST" enctype="multipart/form-data">
+
+              <div style="margin-bottom: 20px">
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50">Title</label>
+                <input type="text" name="title" value="<%= slider.title %>" required style="
+                  width: 100%;
+                  padding: 10px;
+                  border: 1px solid #ccc;
+                  border-radius: 4px;
+                " />
+              </div>
+
+              <div style="margin-bottom: 20px">
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50">Description</label>
+                <input type="text" name="description" value="<%= slider.description %>" required style="
+                  width: 100%;
+                  padding: 10px;
+                  border: 1px solid #ccc;
+                  border-radius: 4px;
+                " />
+              </div>
+
+              <!-- Category Dropdown -->
+              <label for="category" style="font-weight: bold">Category:</label>
+              <select name="categoryId" required style="width: 100%; padding: 10px; margin-bottom: 20px">
+                <option value="">-- Select Category --</option>
+                <% if (category.length> 0) { category.forEach(cat => { %>
+                  <option value="<%=cat._id%>" <%=String(slider.categoryId)===String(cat._id) ? 'selected' : '' %>>
+                    <%= cat.name %>
+                  </option>
+                  <% }) } %>
+              </select>
+
+              <!-- Product Dropdown (will be shown dynamically) -->
+              <div id="productContainer" style="margin-bottom: 20px;">
+                <label for="productId" style="font-weight: bold">Product:</label>
+                <select name="productId" id="productId" style="width: 100%; padding: 10px;">
+                  <option value="">-- Select Product --</option>
+                </select>
+              </div>
+
+              <!-- Mobile Image -->
+              <div style="margin-bottom: 20px">
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50">Mobile Image</label>
+                <input type="file" name="imageMobile" style="
+              width: 100%;
+              padding: 10px;
+              border: 1px solid #ccc;
+              border-radius: 4px;
+            " multiple />
+              </div>
+
+              <!-- Web Image -->
+              <div style="margin-bottom: 20px">
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50">Web Image</label>
+                <input type="file" name="imageWeb" style="
+              width: 100%;
+              padding: 10px;
+              border: 1px solid #ccc;
+              border-radius: 4px;
+            " multiple />
+              </div>
+
+              <div style="text-align: center">
+                <button type="submit" style="
+                  padding: 10px 20px;
+                  background-color: #27ae60;
+                  color: white;
+                  border: none;
+                  border-radius: 4px;
+                  cursor: pointer;
+                ">
+                  Update
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        const selectedCategoryId = $('select[name="categoryId"]').val();
+        const selectedProductId = "<%= slider.productId %>";
+
+        // Function to load products based on category
+        function loadProducts(categoryId, selectedProdId = "") {
+          if (!categoryId) {
+            $('#productId').html('<option value="">-- Select Product --</option>');
+            return;
+          }
+
+          $.ajax({
+            url: `/admin/getProducts/${categoryId}`,
+            type: 'GET',
+            success: function (data) {
+              let options = '<option value="">-- Select Product --</option>';
+              data.forEach(prod => {
+                const selected = String(prod._id) === String(selectedProdId) ? 'selected' : '';
+                options += `<option value="${prod._id}" ${selected}>${prod.name}</option>`;
+              });
+              $('#productId').html(options);
+            },
+            error: function () {
+              alert('Failed to load products');
+            }
+          });
+        }
+
+        // Load products on page load
+        loadProducts(selectedCategoryId, selectedProductId);
+
+        // Load products on category change
+        $('select[name="categoryId"]').on('change', function () {
+          const newCatId = $(this).val();
+          loadProducts(newCatId);
+        });
+      });
+    </script>
+
+</body>
+
+</html>

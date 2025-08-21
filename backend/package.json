@@ -1,0 +1,35 @@
+{
+  "name": "crud-3-practice",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "admin": "nodemon src/admin_app.js",
+    "user": "nodemon src/user_app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.5.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
+    "framer-motion": "^12.23.6",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.15.2",
+    "multer": "^2.0.2",
+    "nodemailer": "^7.0.3",
+    "razorpay": "^2.9.6",
+    "styled-components": "^6.1.19",
+    "sweetalert2": "^11.22.1",
+    "twilio": "^5.7.1",
+    "uuid": "^11.1.0"
+  }
+}
